@@ -39,3 +39,18 @@ var pessoa = {
   altura: 1.80
 }
 console.log(pessoa);
+
+// Função dentro de objeto
+var objeto = {
+  string: "Olá mundo!",
+  number: 100,
+  array: [ 10, 20, 30 ],
+  function: function () {
+    console.log('Eu sou uma função dentro de um objeto!');
+    return "oi!";
+  }
+}
+console.log(objeto);
+
+// Executar a função do objeto
+objeto.function();
