@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "balance": "$2,371.67",
+    "picture": "http://placehold.it/32x32",
+    "age": 24,
+    "name": "Bray Weaver",
+    "gender": "male",
+    "email": "brayweaver@fuelton.com",
+    "phone": "+1 (972) 478-2216",
+    "address": "779 Hunterfly Place, Noblestown, Rhode Island, 9644",
+    "is_active": false,
+    "registered_at": "2021-08-31T09:26:47 +03:00"
+  },
+  {
+    "id": 2,
+    "balance": "$2,127.49",
+    "picture": "http://placehold.it/32x32",
+    "age": 30,
+    "name": "Roach Bennett",
+    "gender": "male",
+    "email": "roachbennett@fuelton.com",
+    "phone": "+1 (808) 543-3646",
+    "address": "636 Hendrickson Place, Hillsboro, Texas, 236",
+    "is_active": false,
+    "registered_at": "2020-06-06T03:29:34 +03:00"
+  },
+  {
+    "id": 3,
+    "balance": "$1,989.05",
+    "picture": "http://placehold.it/32x32",
+    "age": 35,
+    "name": "Carissa Joyner",
+    "gender": "female",
+    "email": "carissajoyner@fuelton.com",
+    "phone": "+1 (950) 535-3874",
+    "address": "888 Everett Avenue, Cassel, California, 1690",
+    "is_active": true,
+    "registered_at": "2015-07-11T06:10:03 +03:00"
+  },
+  {
+    "id": 4,
+    "balance": "$3,254.39",
+    "picture": "http://placehold.it/32x32",
+    "age": 37,
+    "name": "Nielsen Dyer",
+    "gender": "male",
+    "email": "nielsendyer@fuelton.com",
+    "phone": "+1 (870) 499-2160",
+    "address": "675 Radde Place, Bodega, Pennsylvania, 7798",
+    "is_active": false,
+    "registered_at": "2019-08-03T02:48:35 +03:00"
+  },
+  {
+    "id": 5,
+    "balance": "$3,599.90",
+    "picture": "http://placehold.it/32x32",
+    "age": 35,
+    "name": "Wheeler Berger",
+    "gender": "male",
+    "email": "wheelerberger@fuelton.com",
+    "phone": "+1 (898) 492-2383",
+    "address": "428 Burnett Street, Dunlo, Massachusetts, 6769",
+    "is_active": true,
+    "registered_at": "2021-01-20T08:05:45 +03:00"
+  },
+  {
+    "id": 6,
+    "balance": "$2,458.73",
+    "picture": "http://placehold.it/32x32",
+    "age": 35,
+    "name": "Golden Hawkins",
+    "gender": "male",
+    "email": "goldenhawkins@fuelton.com",
+    "phone": "+1 (924) 473-2665",
+    "address": "334 Cambridge Place, Wells, District Of Columbia, 5524",
+    "is_active": true,
+    "registered_at": "2021-04-30T10:05:52 +03:00"
+  },
+  {
+    "id": 7,
+    "balance": "$2,460.17",
+    "picture": "http://placehold.it/32x32",
+    "age": 36,
+    "name": "Chase Norton",
+    "gender": "male",
+    "email": "chasenorton@fuelton.com",
+    "phone": "+1 (933) 460-3137",
+    "address": "110 Sapphire Street, Chicopee, Nevada, 2300",
+    "is_active": true,
+    "registered_at": "2017-04-20T06:12:58 +03:00"
+  }
+]
