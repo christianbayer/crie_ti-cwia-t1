@@ -12,14 +12,6 @@ const getUsers = () => {
   });
 }
 
-const findUser = (id) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const user = users.find((user) => user.id === id);
-    resolve(user);
-  });
-}
-
 const createUser = (data) => {
   return new Promise(async (resolve, reject) => {
     const users = await getUsers();
@@ -28,27 +20,6 @@ const createUser = (data) => {
     users.push(data);
     await fsPromises.writeFile(USERS_FILENAME, JSON.stringify(users));
     resolve(data);
-  });
-}
-
-const updateUser = (data, id) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const index = users.findIndex((user) => user.id === id);
-    data.id = id;
-    users[index] = data;
-    await fsPromises.writeFile(USERS_FILENAME, JSON.stringify(users));
-    resolve(data);
-  });
-}
-
-const deleteUser = (id) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const index = users.findIndex((user) => user.id === id);
-    users.splice(index, 1);
-    await fsPromises.writeFile(USERS_FILENAME, JSON.stringify(users));
-    resolve();
   });
 }
 
@@ -72,13 +43,10 @@ const createServer = () => {
         data = await getUsers();
       } else if (method === 'POST' && url === '/users') {
         data = await createUser(payload);
-      } else if (method === 'PUT' && segments[0] === 'users' && segments.length === 2) {
-        data = await updateUser(payload, parseInt(segments[1]));
-      } else if (method === 'DELETE' && segments[0] === 'users' && segments.length === 2) {
-        await deleteUser(parseInt(segments[1]));
-        data = {};
       } else if (method === 'GET' && segments[0] === 'users' && segments.length === 2) {
-        const user = await findUser(parseInt(segments[1]));
+        const id = +segments[1];
+        const users = await getUsers();
+        const user = users.find((user) => user.id === id);
         if (user) {
           data = user;
         } else {
