@@ -1,58 +1,9 @@
 const express = require('express');
-const fs = require('fs');
-const fsPromises = fs.promises;
+const UserModel = require('./models/User');
 
-const USERS_FILENAME = './users.json';
 const PORT = 3000;
 
-const getUsers = () => {
-  return new Promise(async (resolve, reject) => {
-    const dados = await fsPromises.readFile(USERS_FILENAME, 'utf-8');
-    resolve(JSON.parse(dados));
-  });
-}
-
-const findUser = (id) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const user = users.find((user) => user.id === id);
-    resolve(user);
-  });
-}
-
-const createUser = (data) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const id = (users.length ? users[users.length - 1].id : 0) + 1;
-    data.id = id;
-    users.push(data);
-    await fsPromises.writeFile(USERS_FILENAME, JSON.stringify(users));
-    resolve(data);
-  });
-}
-
-const updateUser = (data, id) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const index = users.findIndex((user) => user.id === id);
-    data.id = id;
-    users[index] = data;
-    await fsPromises.writeFile(USERS_FILENAME, JSON.stringify(users));
-    resolve(data);
-  });
-}
-
-const deleteUser = (id) => {
-  return new Promise(async (resolve, reject) => {
-    const users = await getUsers();
-    const index = users.findIndex((user) => user.id === id);
-    users.splice(index, 1);
-    await fsPromises.writeFile(USERS_FILENAME, JSON.stringify(users));
-    resolve();
-  });
-}
-
-const validateData = async (data) => {
+const validateData = async (data, id) => {
   const attributes = ['name', 'age', 'sex', 'email'];
   const user = {};
   for (const attribute of attributes) {
@@ -62,22 +13,22 @@ const validateData = async (data) => {
     user[attribute] = data[attribute];
   }
 
-  if (await checkIfNameExists(user.name)) {
-    throw new Error(`The user "${user.name}" already exists.`);
+  if (await checkIfEmailExists(user.email, id)) {
+    throw new Error(`The user with mail address "${user.email}" already exists.`);
   }
 
   return user;
 }
 
-const checkIfNameExists = async (name) => {
-  const users = await getUsers();
-  const user = users.find((user) => user.name === name);
+const checkIfEmailExists = async (email, id) => {
+  const users = await UserModel.all();
+  const user = users.find((user) => user.email === email && user.id !== Number(id));
 
   return Boolean(user);
 }
 
 const validateUserId = async (req, res, next) => {
-  const user = await findUser(Number(req.params.userId));
+  const user = await UserModel.find(req.params.userId);
   if (! user) {
     return res.status(404).json({ error: 'User not found' });
   }
@@ -94,14 +45,14 @@ app.use((req, res, next) => {
 });
 
 app.get('/users', async (req, res, next) => {
-  const users = await getUsers();
+  const users = await UserModel.all();
   res.json(users);
 });
 
 app.post('/users', async (req, res, next) => {
   try {
     const data = await validateData(req.body);
-    const user = await createUser(data);
+    const user = await UserModel.create(data);
     res.json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -109,14 +60,15 @@ app.post('/users', async (req, res, next) => {
 });
 
 app.get('/users/:userId', validateUserId, async (req, res, next) => {
-  const user = await findUser(Number(req.params.userId));
+  const user = await UserModel.find(req.params.userId);
   res.json(user);
 });
 
 app.put('/users/:userId', validateUserId, async (req, res, next) => {
   try {
-    const data = await validateData(req.body);
-    const user = await updateUser(data, Number(req.params.userId));
+    const id = req.params.userId;
+    const data = await validateData(req.body, id);
+    const user = await UserModel.update(data, id);
     res.json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -124,7 +76,7 @@ app.put('/users/:userId', validateUserId, async (req, res, next) => {
 });
 
 app.delete('/users/:userId', validateUserId, async (req, res, next) => {
-  await deleteUser(Number(req.params.userId));
+  await UserModel.delete(req.params.userId);
   res.json({});
 });
 
