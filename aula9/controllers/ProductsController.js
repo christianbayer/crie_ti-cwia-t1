@@ -4,7 +4,45 @@ const ProductModel = require('../models/Product');
 class ProductsController {
 
   index = async (req, res, next) => {
-    res.json(await ProductModel.findAll());
+    const params = req.query;
+    const limit = params.limit || 100;
+    const page = params.page || 1;
+    const offset = (page - 1) * limit;
+    const sort = params.sort || 'id';
+    const order = params.order || 'ASC';
+    const where = {};
+
+    if (params.name) {
+      where.name = {
+        [Op.iLike]: `%${params.name}%`
+      };
+    }
+
+    if (params.brand) {
+      where.brand = {
+        [Op.iLike]: `%${params.brand}%`
+      };
+    }
+
+    if (params.min_price) {
+      where.price = {
+        [Op.gte]: params.min_price
+      };
+    }
+
+    if (params.max_price) {
+      if (! where.price) {
+        where.price = {};
+      }
+      where.price[Op.lte] = params.max_price;
+    }
+
+    res.json(await ProductModel.findAll({
+      where: where,
+      limit: limit,
+      offset: offset,
+      order: [ [sort, order] ]
+    }));
   }
 
   create = async (req, res, next) => {
